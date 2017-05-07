@@ -1,0 +1,3 @@
+[submodule "jscad-utils"]
+	path = jscad-utils
+	url = git://github.com/johnwebbcole/jscad-utils
