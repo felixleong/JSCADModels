@@ -39,8 +39,8 @@ function pieSlice (segments, height, radius, tolerance) {
 
   return difference(
     shape.extrude({offset: [0, 0, height]}),
-    grooveObj(height, 60, tolerance, radius),
-    grooveObj(height, 60, tolerance, radius)
+    grooveObj(height, 45, tolerance, radius),
+    grooveObj(height, 45, tolerance, radius)
       .mirroredY()
       .rotateZ(360 / segments)
   )
@@ -63,31 +63,31 @@ function ridge (
 
 function main () {
   let chipRadius = 12.5
-  let chipHeight = 4
-  let ridgeHeight = 1.25
+  let chipHeight = 2.5
+  let ridgeHeight = 0.8
   let ridgeBorderWidth = 3.5
-  let segments = 10
-  let tolerance = 0.2
-  let textTemplate = denom1
+  let segments = 14
+  let tolerance = 0.15
+  let textTemplate = denom100
 
-  let text = textTemplate().scale([2.5, 2.5]).extrude({offset: [0, 0, 0.15]})
+  let text = textTemplate().scale([2.2, 2.2]).extrude({offset: [0, 0, 0.45]})
 
   return [
     ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance),
     difference(
-      cylinder({r: chipRadius - ridgeBorderWidth - tolerance, h: ridgeHeight, fn: RESOLUTION}),
+      cylinder({r: chipRadius - ridgeBorderWidth - 0.7, h: ridgeHeight, fn: RESOLUTION}),
       text.mirroredX()
     ),
     difference(
       cylinder({r: chipRadius, h: chipHeight - 2 * ridgeHeight, fn: RESOLUTION})
         .translate([0, 0, ridgeHeight]),
       cylinder({r: chipRadius - ridgeBorderWidth - tolerance, h: ridgeHeight, fn: RESOLUTION})
-        .translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.5])
+        .translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.15]),
+        text.translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.6])
     ),
     ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance)
     .mirroredZ()
     .rotateZ(360 / segments)
     .translate([0, 0, chipHeight]),
-    text.translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.5])
   ]
 }
