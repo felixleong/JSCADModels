@@ -72,7 +72,7 @@ function main () {
 
   let text = textTemplate().scale([2.2, 2.2]).extrude({offset: [0, 0, 0.45]})
 
-  return [
+  return union(
     ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance),
     difference(
       cylinder({r: chipRadius - ridgeBorderWidth - 0.7, h: ridgeHeight, fn: RESOLUTION}),
@@ -88,6 +88,6 @@ function main () {
     ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance)
     .mirroredZ()
     .rotateZ(360 / segments)
-    .translate([0, 0, chipHeight]),
-  ]
+    .translate([0, 0, chipHeight])
+  )
 }

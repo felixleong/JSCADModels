@@ -98,8 +98,8 @@ function main() {
   let width = 20
 
   let _ratio = width / 172.5
-  return [
-    outline().scale([_ratio, _ratio]).extrude({offset: [0, 0, 4]}),
-    pattern().scale([_ratio, _ratio]).extrude({offset: [0, 0, 1]}).translate([0, 0, 4])
-  ]
+  return union(
+    outline().scale([_ratio, _ratio]).extrude({offset: [0, 0, 3]}),
+    pattern().scale([_ratio, _ratio]).extrude({offset: [0, 0, 1.1]}).translate([0, 0, 2.9])
+  )
 }
