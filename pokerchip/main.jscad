@@ -39,8 +39,8 @@ function pieSlice (segments, height, radius, tolerance) {
 
   return difference(
     shape.extrude({offset: [0, 0, height]}),
-    grooveObj(height, 45, tolerance, radius),
-    grooveObj(height, 45, tolerance, radius)
+    grooveObj(height, 80, tolerance, radius),
+    grooveObj(height, 80, tolerance, radius)
       .mirroredY()
       .rotateZ(360 / segments)
   )
@@ -68,7 +68,7 @@ function main () {
   let ridgeBorderWidth = 3.5
   let segments = 14
   let tolerance = 0.15
-  let textTemplate = denom100
+  let textTemplate = denom1
 
   let text = textTemplate().scale([2.2, 2.2]).extrude({offset: [0, 0, 0.45]})
 
