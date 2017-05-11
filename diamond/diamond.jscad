@@ -4,7 +4,7 @@
 // date: Wed May 10 2017 10:51:18 GMT+0800 (+08)
 // source: template.svg
 //
-function outline(params) {
+function outline() {
   var cag0 = new CAG()
   var cag1 = new CAG()
   var cag10 = new CAG()
@@ -94,10 +94,18 @@ function pattern(params) {
   return cag0.center()
 }
 
-function main() {
-  let width = 15
+function getParameterDefinitions () {
+  return [
+    {
+      name: 'width',
+      type: 'float',
+      initial: 15,
+      caption: 'Token width'},
+  ]
+}
 
-  let _ratio = width / 172.5
+function main(params) {
+  let _ratio = params.width / 172.5
   return union(
     outline().scale([_ratio, _ratio]).extrude({offset: [0, 0, 2]}),
     pattern().scale([_ratio, _ratio]).extrude({offset: [0, 0, 1]}).translate([0, 0, 2])
