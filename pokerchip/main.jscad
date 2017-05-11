@@ -2,6 +2,13 @@
 include('./denom.jscad')
 
 var RESOLUTION = 100
+var DENOMINATIONS = {
+  1: denom1,
+  5: denom5,
+  10: denom10,
+  25: denom25,
+  100: denom100
+}
 
 function radians (degree) {
   return degree / 180 * Math.PI
@@ -61,33 +68,85 @@ function ridge (
       fn: RESOLUTION}))
 }
 
-function main () {
-  let chipRadius = 12.5
-  let chipHeight = 2.5
-  let ridgeHeight = 0.8
-  let ridgeBorderWidth = 3.5
-  let segments = 14
-  let tolerance = 0.15
-  let textTemplate = denom1
+function getParameterDefinitions () {
+  return [
+    {
+      name: 'chipRadius',
+      type: 'float',
+      initial: 12.5,
+      caption: 'Chip radius'},
+    {
+      name: 'chipHeight',
+      type: 'float',
+      initial: 2.5,
+      caption: 'Chip height'},
+    {
+      name: 'ridgeHeight',
+      type: 'float',
+      initial: 0.8,
+      caption: 'Ridge height'},
+    {
+      name: 'ridgeBorder',
+      type: 'float',
+      initial: 3.5,
+      caption: 'Ridge border width'},
+    {
+      name: 'ridgeSegments',
+      type: 'int',
+      initial: 14,
+      caption: 'Number of segment on the ridge'},
+    {
+      name: 'tolerance',
+      type: 'float',
+      initial: 0.15,
+      caption: 'Tolerannce'},
+    {
+      name: 'denom',
+      type: 'int',
+      initial: 1,
+      caption: 'Denomination'}
+  ]
+}
 
+function main (params) {
+  let textTemplate = DENOMINATIONS[params.denom]
   let text = textTemplate().scale([2.2, 2.2]).extrude({offset: [0, 0, 0.45]})
 
   return [
-    ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance),
+    ridge(
+      params.ridgeSegments, params.chipRadius, params.ridgeBorder,
+      params.ridgeHeight, params.tolerance),
     difference(
-      cylinder({r: chipRadius - ridgeBorderWidth - 0.7, h: ridgeHeight, fn: RESOLUTION}),
+      cylinder({
+        r: params.chipRadius - params.ridgeBorder - 0.7,
+        h: params.ridgeHeight,
+        fn: RESOLUTION}),
       text.mirroredX()
     ),
     difference(
-      cylinder({r: chipRadius, h: chipHeight - 2 * ridgeHeight, fn: RESOLUTION})
-        .translate([0, 0, ridgeHeight]),
-      cylinder({r: chipRadius - ridgeBorderWidth - tolerance, h: ridgeHeight, fn: RESOLUTION})
-        .translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.15]),
-        text.translate([0, 0, chipHeight - ridgeHeight - tolerance - 0.6])
+      cylinder({
+        r: params.chipRadius,
+        h: params.chipHeight - 2 * params.ridgeHeight,
+        fn: RESOLUTION})
+        .translate([0, 0, params.ridgeHeight]),
+      cylinder({
+        r: params.chipRadius - params.ridgeBorder - params.tolerance,
+        h: params.ridgeHeight,
+        fn: RESOLUTION})
+        .translate([
+          0,
+          0,
+          params.chipHeight - params.ridgeHeight - params.tolerance - 0.15]),
+        text.translate([
+          0,
+          0,
+          params.chipHeight - params.ridgeHeight - params.tolerance - 0.6])
     ),
-    ridge(segments, chipRadius, ridgeBorderWidth, ridgeHeight, tolerance)
-    .mirroredZ()
-    .rotateZ(360 / segments)
-    .translate([0, 0, chipHeight])
+    ridge(
+      params.ridgeSegments, params.chipRadius, params.ridgeBorder,
+      params.ridgeHeight, params.tolerance)
+      .mirroredZ()
+      .rotateZ(360 / params.ridgeSegments)
+      .translate([0, 0, params.chipHeight])
   ]
 }
